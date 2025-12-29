@@ -3305,7 +3305,7 @@ using Aqua: Aqua
             13//1350
         ]
 
-        tdrk_2 = TwoDerivativeRungeKuttaMethod(A_1, b_1, A_2, b_2)
+        tdrk_2 = @inferred TwoDerivativeRungeKuttaMethod(A_1, b_1, A_2, b_2)
         # bseries
         tdrk_series_2 = @inferred bseries(tdrk_2, 8)
         #should be 7th order

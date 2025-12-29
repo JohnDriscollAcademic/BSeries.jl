@@ -3261,7 +3261,7 @@ using Aqua: Aqua
 
         #constructor
 
-        tdrk = TwoDerivativeRungeKuttaMethod(A1, b1, A2, b2)
+        tdrk = @inferred TwoDerivativeRungeKuttaMethod(A1, b1, A2, b2)
 
         @test tdrk isa TwoDerivativeRungeKuttaMethod
         @test size(tdrk.A1) == (2, 2)

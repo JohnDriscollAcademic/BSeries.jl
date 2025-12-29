@@ -1309,10 +1309,16 @@ Base.eltype(tdrk::TwoDerivativeRungeKuttaMethod{T}) where {T} = T
     bseries(tdrk::TwoDerivativeRungeKuttaMethod, order) -> TruncatedBSeries
 
 Construct the truncated B-series of a two-derivative Runge–Kutta method `tdrk`
-up to the specified `order`.
+up to the specified integer `order`.
 
-Returns a `TruncatedBSeries{RootedTree, V}` where `V` is inferred from
-the element type of `tdrk`.
+See also [`TwoDerivativeRungeKuttaMethod`](@ref).
+
+!!! note "Normalization by elementary differentials"
+    The coefficients of the B-series returned by this method need to be
+    multiplied by a power of the time step divided by the `symmetry` of the
+    rooted tree and multiplied by the corresponding elementary differential
+    of the input vector field ``f``.
+    See also [`evaluate`](@ref).
 """
 function bseries(tdrk::TwoDerivativeRungeKuttaMethod, order)
     # determine coefficient type

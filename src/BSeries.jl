@@ -1267,7 +1267,7 @@ autonomous problems is applied.
 Given an ODE ``u'(t) = f(t, u(t))`` with ``u''(t) = g(t, u(t))``,
 one step from ``u^{n}`` to ``u^{n+1}`` is given by
 
-'''math
+```math
 \\begin{aligned}
   y^i &= u^n + \\Delta t \\sum_j a^{1}_{i,j} f(t^n + c_i \\Delta t, y^i) + \\Delta t^2 \\sum_j a^{2}_{i,j} g(t^n + c_i \\Delta t, y^i), \\\
   u^{n+1} &= u^n + \\Delta t \\sum_i b^1_{i} f(t^n + c_i \\Delta t, y^i) + \\Delta t^2 \\sum_i b^2_{i} g(t^n + c_i \\Delta t, y^i),

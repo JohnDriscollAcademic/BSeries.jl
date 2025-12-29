@@ -1483,6 +1483,37 @@ function collapse_tree(t::RootedTree)
     return CollapsedArray
 end
 
+
+"""
+    substitute(b, a, t::AbstractRootedTree)
+
+Compute the coefficient corresponding to the tree `t` of the B-series that is
+formed by substituting the B-series `b` into the B-series `a`. It is assumed
+that the B-series `b` has the coefficient zero of the empty tree.
+
+# References
+
+Section 3.2 of
+- Philippe Chartier, Ernst Hairer, Gilles Vilmart (2010)
+  Algebraic Structures of B-series.
+  Foundations of Computational Mathematics
+  [DOI: 10.1007/s10208-010-9065-1](https://doi.org/10.1007/s10208-010-9065-1)
+"""
+function substitute(b, a, t::AbstractRootedTree)
+    result = zero(first(values(a)) * first(values(b)))
+
+    for (forest, skeleton) in PartitionIterator(t)
+        update = a[skeleton]
+        update isa Rational && iszero(update) && continue
+        for tree in forest
+            update *= b[tree]
+        end
+        result += update
+    end
+
+    return result
+end
+
 """
     substitute(b, a)
 

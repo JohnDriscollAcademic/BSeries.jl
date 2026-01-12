@@ -1287,25 +1287,23 @@ struct TwoDerivativeRungeKuttaMethod{T,
                                      VecT <: AbstractVector{T}} <:RootedTrees.AbstractTimeIntegrationMethod
     A1::MatT
     b1::VecT
-    c1::VecT
     A2::MatT
     b2::VecT
-    c2::VecT
+    c::VecT
 end
 
-function TwoDerivativeRungeKuttaMethod(A1, b1, A2, b2, c1 = vec(sum(A1, dims=2)), c2 = vec(sum(A2, dims=2)))
+function TwoDerivativeRungeKuttaMethod(A1, b1, A2, b2, c = vec(sum(A1, dims=2)))
     # promote all numeric types together
-    T = promote_type(eltype(A1), eltype(b1), eltype(A2), eltype(b2), eltype(c1))
+    T = promote_type(eltype(A1), eltype(b1), eltype(A2), eltype(b2), eltype(c))
 
     A1T = T.(A1)
     b1T = T.(b1)
-    c1T = T.(c1)
     A2T = T.(A2)
     b2T = T.(b2)
-    c2T = T.(c2)
+    cT = T.(c)
 
     return TwoDerivativeRungeKuttaMethod{T, typeof(A1T), typeof(b1T)}(
-        A1T, b1T, c1T, A2T, b2T, c2T
+        A1T, b1T, A2T, b2T, cT
     )
 end
 
@@ -1393,14 +1391,13 @@ where we are evaluating eta(t) for the elementary weight of the tree t
 """
 function derivative_weight(t::RootedTree, tdrk::TwoDerivativeRungeKuttaMethod)
     A1 = tdrk.A1
-    c1 = tdrk.c1
     A2 = tdrk.A2
-    c2 = tdrk.c2
+    c = tdrk.c
 
-    result1 = zero(c1) .+ one(eltype(c1))
+    result1 = zero(c) .+ one(eltype(c))
 
     if t == rootedtree(Int64[]) || t == rootedtree([1])
-        return zero(c1) .+ one(eltype(c1))
+        return zero(c) .+ one(eltype(c))
     else
         subtrees_arr = subtrees(t)
         l = 1
@@ -1427,14 +1424,13 @@ where we are evaluating eta(t\\[1/2]) part for the elementary weight of the tree
 """
 function collapsed_derivative_weight(t::RootedTree, tdrk::TwoDerivativeRungeKuttaMethod)
     A1 = tdrk.A1
-    c1 = tdrk.c1
     A2 = tdrk.A2
-    c2 = tdrk.c2
+    c = tdrk.c
     
-    result = zero(c2)
+    result = zero(c)
     
     if t == rootedtree(Int64[])
-        return zero(c1) .+ one(eltype(c1))
+        return zero(c) .+ one(eltype(c))
     else
         collapsed_trees = collapse_tree(t)
         number_of_trees = length(collapsed_trees)
@@ -1442,7 +1438,7 @@ function collapsed_derivative_weight(t::RootedTree, tdrk::TwoDerivativeRungeKutt
         for k in 1:number_of_trees
             treecombinations = collapsed_trees[k]
             number2 = length(treecombinations)
-            sum = zero(c1) .+ one(eltype(c1))
+            sum = zero(c) .+ one(eltype(c))
 
             for m in 1:number2
                 step = A1 * derivative_weight(treecombinations[m], tdrk) .+

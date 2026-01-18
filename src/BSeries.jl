@@ -1268,10 +1268,10 @@ Given an ODE ``u'(t) = f(t, u(t))`` with ``u''(t) = g(t, u(t))``,
 one step from ``u^{n}`` to ``u^{n+1}`` is given by
 
 ```math
-\\begin{aligned}
-  y^i &= u^n + \\Delta t \\sum_j a^{1}_{i,j} f(t^n + c_j \\Delta t, y^j) + \\Delta t^2 \\sum_j a^{2}_{i,j} g(t^n + c_j \\Delta t, y^j), \\\
-  u^{n+1} &= u^n + \\Delta t \\sum_i b^1_{i} f(t^n + c_i \\Delta t, y^i) + \\Delta t^2 \\sum_i b^2_{i} g(t^n + c_i \\Delta t, y^i).
-\\end{aligned}
+\begin{aligned}
+  y^i &= u^n + \Delta t \sum_j a^{1}_{i,j} f(t^n + c_j \Delta t, y^j) + \Delta t^2 \sum_j a^{2}_{i,j} g(t^n + c_j \Delta t, y^j), \\
+  u^{n+1} &= u^n + \Delta t \sum_i b^1_{i} f(t^n + c_i \Delta t, y^i) + \Delta t^2 \sum_i b^2_{i} g(t^n + c_i \Delta t, y^i).
+\end{aligned}
 ```
 
 # References
@@ -1349,26 +1349,12 @@ function bseries(tdrk::TwoDerivativeRungeKuttaMethod, order)
 end
 
 """
-    elementary_weight(t::RootedTree, tdrk::TwoDerivativeRungeKuttaMethod) -> Number
+    elementary_weight(t::RootedTree, tdrk::TwoDerivativeRungeKuttaMethod)
 
-Compute the elementary weight associated with the rooted tree `t`
-for a two-derivative Runge–Kutta method `tdrk`.
+Compute the elementary weight \$\Phi(t)\$ for a TDRK method.
 
-
-This follows the recursive formula for the Butcher type order conditions exhibited in, 
-Chan, R.P.K., Tsai, A.Y.J. On explicit two-derivative Runge-Kutta methods.
-- Numer. Algor 53, 171–194 (2010). https://doi.org/10.1007/s11075-009-9349-1
-
-#see formula 16 in the paper
-# alpha(t) = b1*eta(subtrees(t)) +b2*eta(collapse_trees(nu))
-
-# Arguments
-- `t`: A `RootedTree` representing the current term.
-- `tdrk`: The `TwoDerivativeRungeKuttaMethod` whose coefficients define the
-  weights.
-
-# Returns
-A scalar weight equal to the sum over all collapsed trees.
+Following Chan & Tsai (2010, Eq. 16), the weight is:
+\$\$ \Phi(t) = b_1 \cdot \eta(t) + b_2 \cdot \bar{\eta}(t) \$\$
 """
 function elementary_weight(t::RootedTree, tdrk::TwoDerivativeRungeKuttaMethod)
     b1 = tdrk.b1
@@ -1380,14 +1366,10 @@ end
 """
     derivative_weight(t::RootedTree, tdrk::TwoDerivativeRungeKuttaMethod)
 
-Compute the derivative weight for the standered trees `t` in a two-derivative Runge–Kutta (TDRK) method.
+Compute the derivative weight \$\eta(t)\$ for a TDRK method.
 
-this corresponds to formula 15 in Chan, R.P.K., Tsai, A.Y.J. On explicit two-derivative Runge-Kutta methods.
-
-eta(t) = A1*eta(t) + A2*eta(t/[1,2])
-
-where we are evaluating eta(t) for the elementary weight of the tree t
-
+Following Chan & Tsai (2010, Eq. 15):
+\$\$ \eta(t) = A_1 \cdot \prod \eta(t_i) + A_2 \cdot \prod \bar{\eta}(t_j) \$\$
 """
 function derivative_weight(t::RootedTree, tdrk::TwoDerivativeRungeKuttaMethod)
     A1 = tdrk.A1

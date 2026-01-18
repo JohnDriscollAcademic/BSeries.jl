@@ -1276,10 +1276,10 @@ one step from ``u^{n}`` to ``u^{n+1}`` is given by
 
 # References
 
--Chan, R.P.K., Tsai, A.Y.J. 
-"On explicit two-derivative Runge-Kutta methods."
-Numer Algor 53, 171–194 (2010):
-[DOI: 10.1007/s11075-009-9349-1](https://doi.org/10.1007/s11075-009-9349-1)
+- Chan, R.P.K., Tsai, A.Y.J. 
+  "On explicit two-derivative Runge-Kutta methods."
+  Numer Algor 53, 171–194 (2010):
+  [DOI: 10.1007/s11075-009-9349-1](https://doi.org/10.1007/s11075-009-9349-1)
 
 """
 struct TwoDerivativeRungeKuttaMethod{T,
